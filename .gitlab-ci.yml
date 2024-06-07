@@ -1,0 +1,15 @@
+---
+include:
+  - project: devops/ci-templates
+    ref: master
+    file: pypi-build.yml
+
+unit_tests:
+  image: gmms/gmms-python-builder:0.2.3
+  stage: pre-build
+  variables:
+    PYTEST_ADDOPTS: --cov-config=.coveragerc --cov=tolik_bot --cov-report=term -ra
+  script:
+    - pip3 install -e .[test]
+    - pytest tests
+  coverage: '/TOTAL\s+\d+\s+\d+\s+(\d+%)/'
